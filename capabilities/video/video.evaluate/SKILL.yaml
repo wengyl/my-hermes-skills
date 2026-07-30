@@ -1,0 +1,54 @@
+name: video.evaluate
+version: 1.0.0
+domain: video
+category: evaluation
+description: 评估最终视频质量（分辨率/帧率/音频同步/字幕可读性/画面流畅度/转场自然度）
+input_schema:
+  type: object
+  properties:
+    video_path:
+      type: string
+    script_json:
+      type: object
+      description: 原始脚本用于对比验证
+  required: [video_path]
+output_schema:
+  type: object
+  properties:
+    score:
+      type: number
+      description: 0-100综合分
+    dimensions:
+      type: object
+      properties:
+        resolution:
+          type: number
+        audio_sync:
+          type: number
+        subtitle_readability:
+          type: number
+        visual_flow:
+          type: number
+        transition_quality:
+          type: number
+    defects:
+      type: array
+      items:
+        type: string
+    suggestions:
+      type: array
+      items:
+        type: string
+    passed:
+      type: boolean
+  required: [score, dimensions, defects, passed]
+cost:
+  token_estimate: 2000
+  latency_tier: medium
+  price_cny: 0.05
+evaluation:
+  type: video
+  metrics: [video.score]
+  threshold: 75
+dependencies: [video.compose]
+hermes_tools: [terminal, execute_code]

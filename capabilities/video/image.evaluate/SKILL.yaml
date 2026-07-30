@@ -1,0 +1,41 @@
+name: image.evaluate
+version: 1.0.0
+domain: video
+category: evaluation
+description: 评估生成的图片质量（分辨率达标/中文标注正确/内容与脚本匹配度），输出评分和缺陷清单
+input_schema:
+  type: object
+  properties:
+    image_path:
+      type: string
+    scene:
+      type: object
+      description: 对应的scene脚本
+  required: [image_path, scene]
+output_schema:
+  type: object
+  properties:
+    score:
+      type: number
+      description: 0-100
+    defects:
+      type: array
+      items:
+        type: string
+    suggestions:
+      type: array
+      items:
+        type: string
+    passed:
+      type: boolean
+  required: [score, defects, passed]
+cost:
+  token_estimate: 1000
+  latency_tier: low
+  price_cny: 0.03
+evaluation:
+  type: image
+  metrics: [image.score]
+  threshold: 70
+dependencies: [image.generate]
+hermes_tools: [vision_analyze, execute_code]

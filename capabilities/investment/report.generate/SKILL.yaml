@@ -1,0 +1,43 @@
+name: report.generate
+version: 1.0.0
+domain: investment
+category: generation
+description: 生成投资分析报告（五段式：数据表格+评分系统+问题诊断+操作优先级+调仓前后对比）
+input_schema:
+  type: object
+  properties:
+    portfolio_analysis:
+      type: object
+    fund_diagnoses:
+      type: array
+      items:
+        type: object
+    strategy:
+      type: object
+      description: strategy.generate输出
+    format:
+      type: string
+      enum: [text, html, feishu]
+      description: 输出格式
+  required: [fund_diagnoses, strategy]
+output_schema:
+  type: object
+  properties:
+    report:
+      type: string
+      description: 完整报告文本
+    format:
+      type: string
+    fund_count:
+      type: integer
+  required: [report]
+cost:
+  token_estimate: 2000
+  latency_tier: medium
+  price_cny: 0.05
+evaluation:
+  type: text
+  metrics: [text.score]
+  threshold: 75
+dependencies: [strategy.generate, fund.diagnose, portfolio.analyze]
+hermes_tools: [execute_code]

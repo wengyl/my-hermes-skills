@@ -1,0 +1,35 @@
+# 最佳实践：基金组合诊断方法论
+# 从多次基金诊断任务中沉淀
+
+id: fund_diagnosis_methodology
+domain: investment
+when: 诊断用户基金组合
+confidence: 0.95
+source: accumulated_experience
+last_updated: "2026-07-30"
+
+rules:
+  - id: full_portfolio_view
+    rule: "必须全组合透视，不孤立分析单只基金"
+    reason: "单只基金表现受组合配置影响，孤立分析误导决策"
+    enforcement: hard
+
+  - id: real_time_data_required
+    rule: "必须结合今日市场数据（实时净值+行业涨跌）做相关性分析"
+    reason: "静态数据分析滞后，无法反映当前风险敞口"
+    enforcement: hard
+
+  - id: explicit_action
+    rule: "每只基金必须给明确操作建议（持有/减仓/清仓/加仓）附带具体份额数"
+    reason: "模糊建议无法执行，用户需要可操作的指令"
+    enforcement: hard
+
+  - id: five_section_format
+    rule: "输出五段式：数据表格+评分系统(0-100)+问题诊断+操作优先级(P0/P1/P2)+调仓前后对比"
+    reason: "结构化输出便于用户快速理解和执行"
+    enforcement: soft
+
+  - id: fund_name_required
+    rule: "播报必须带基金简称（非纯代码）"
+    reason: "代码对用户无意义，简称才可识别"
+    enforcement: hard

@@ -1,0 +1,47 @@
+name: dataset.prepare
+version: 1.0.0
+domain: mlops
+category: execution
+description: 数据集预处理（清洗/分词/格式转换/分割），输出训练就绪的数据
+input_schema:
+  type: object
+  properties:
+    source_path:
+      type: string
+    target_format:
+      type: string
+      enum: [jsonl, parquet, csv, arrow]
+    split_ratio:
+      type: string
+      description: 训练/验证/测试分割比（如 0.8/0.1/0.1）
+    preprocessing:
+      type: array
+      items:
+        type: string
+      description: 预处理步骤列表
+  required: [source_path, target_format]
+output_schema:
+  type: object
+  properties:
+    output_paths:
+      type: object
+      properties:
+        train:
+          type: string
+        val:
+          type: string
+        test:
+          type: string
+    total_samples:
+      type: integer
+  required: [output_paths]
+cost:
+  token_estimate: 100
+  latency_tier: medium
+  price_cny: 0.0
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 80
+dependencies: []
+hermes_tools: [terminal, execute_code]

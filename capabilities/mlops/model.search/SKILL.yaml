@@ -1,0 +1,51 @@
+name: model.search
+version: 1.0.0
+domain: mlops
+category: perception
+description: 搜索HuggingFace Hub获取可用模型列表，按任务类型/语言/下载量过滤
+input_schema:
+  type: object
+  properties:
+    task:
+      type: string
+      description: 任务类型（text-generation/image-classification/ASR等）
+    language:
+      type: string
+      description: 语言过滤（zh/en/多语言）
+    sort_by:
+      type: string
+      enum: [downloads, likes, modified]
+      description: 排序方式
+    limit:
+      type: integer
+      description: 返回数量上限
+  required: [task]
+output_schema:
+  type: object
+  properties:
+    models:
+      type: array
+      items:
+        type: object
+        properties:
+          model_id:
+            type: string
+          downloads:
+            type: integer
+          likes:
+            type: integer
+          tags:
+            type: array
+            items:
+              type: string
+  required: [models]
+cost:
+  token_estimate: 200
+  latency_tier: low
+  price_cny: 0.0
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 70
+dependencies: []
+hermes_tools: [terminal]

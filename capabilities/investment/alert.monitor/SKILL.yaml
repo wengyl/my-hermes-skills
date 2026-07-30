@@ -1,0 +1,57 @@
+name: alert.monitor
+version: 1.0.0
+domain: investment
+category: verification
+description: 监控基金/市场指标，触发阈值条件时生成告警消息（空stdout=静默）
+input_schema:
+  type: object
+  properties:
+    monitor_config:
+      type: object
+      properties:
+        funds:
+          type: array
+          items:
+            type: string
+          description: 监控基金代码列表
+        thresholds:
+          type: object
+          description: 阈值配置（涨跌幅/估值偏差等）
+        market_indices:
+          type: array
+          items:
+            type: string
+          description: 监控市场指数
+    check_type:
+      type: string
+      enum: [realtime, daily, weekly]
+  required: [monitor_config, check_type]
+output_schema:
+  type: object
+  properties:
+    alerts:
+      type: array
+      items:
+        type: object
+        properties:
+          level:
+            type: string
+            enum: [info, warning, critical]
+          message:
+            type: string
+          fund_code:
+            type: string
+    should_notify:
+      type: boolean
+      description: 是否需要推送通知（无告警时为false=静默）
+  required: [alerts, should_notify]
+cost:
+  token_estimate: 500
+  latency_tier: low
+  price_cny: 0.01
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 70
+dependencies: [data.fetch]
+hermes_tools: [terminal, execute_code]

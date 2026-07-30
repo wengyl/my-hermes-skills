@@ -1,0 +1,38 @@
+name: storyboard.create
+version: 1.0.0
+domain: video
+category: generation
+description: 从视频脚本JSON生成HTML分镜模板，每scene对应一个HTML文件，含CSS入场动效和内容布局
+input_schema:
+  type: object
+  properties:
+    script_json:
+      type: object
+      description: script.create的输出JSON
+    template_style:
+      type: string
+      enum: [dark, light, minimal]
+      description: 视觉模板风格
+  required: [script_json]
+output_schema:
+  type: object
+  properties:
+    html_files:
+      type: array
+      items:
+        type: string
+      description: 生成的HTML文件路径列表
+    css_animation:
+      type: string
+      description: 注入的CSS动画代码
+  required: [html_files]
+cost:
+  token_estimate: 3000
+  latency_tier: medium
+  price_cny: 0.10
+evaluation:
+  type: image
+  metrics: [image.score]
+  threshold: 70
+dependencies: [script.create]
+hermes_tools: [write_file, execute_code]

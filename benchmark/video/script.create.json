@@ -1,0 +1,41 @@
+{
+  "skill_name": "script.create",
+  "test_cases": [
+    {
+      "test_id": "topic_to_script",
+      "description": "从主题生成视频脚本",
+      "input": {
+        "source": "道氏理论——技术分析的开山鼻祖",
+        "source_type": "topic",
+        "style": "professional",
+        "target_duration": 300
+      },
+      "expected_output_schema": {
+        "required": ["title", "scenes"],
+        "scene_min_count": 5
+      },
+      "expected_pass_score": 75
+    },
+    {
+      "test_id": "file_to_script",
+      "description": "从文件路径生成视频脚本",
+      "input": {
+        "source": "/tmp/test.pdf",
+        "source_type": "file"
+      },
+      "expected_output_schema": {
+        "required": ["title", "scenes"]
+      },
+      "expected_pass_score": 70
+    },
+    {
+      "test_id": "regression_basic",
+      "description": "回归测试：基本输入不崩溃",
+      "input": {
+        "source": "test",
+        "source_type": "text"
+      },
+      "expected_pass_score": 60
+    }
+  ]
+}

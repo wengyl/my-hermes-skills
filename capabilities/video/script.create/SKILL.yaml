@@ -1,0 +1,67 @@
+name: script.create
+version: 1.0.0
+domain: video
+category: generation
+description: 从用户输入的文档/PDF/文章/主题，生成结构化视频脚本JSON（含scenes列表，每scene含voice_text/visual/chapter_title）
+input_schema:
+  type: object
+  properties:
+    source:
+      type: string
+      description: 输入源：文件路径或主题文本
+    source_type:
+      type: string
+      enum: [file, text, topic]
+      description: 输入类型
+    style:
+      type: string
+      description: 文案风格：professional/casual/educational
+    target_duration:
+      type: integer
+      description: 目标总时长（秒）
+  required: [source, source_type]
+output_schema:
+  type: object
+  properties:
+    title:
+      type: string
+    voice_config:
+      type: object
+      properties:
+        gender:
+          type: string
+        style:
+          type: string
+        speed:
+          type: number
+    scenes:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+          duration:
+            type: integer
+          voice_text:
+            type: string
+          visual:
+            type: string
+          chapter_title:
+            type: string
+          chapter_sub:
+            type: string
+  required: [title, scenes]
+cost:
+  token_estimate: 5000
+  latency_tier: medium
+  price_cny: 0.15
+evaluation:
+  type: text
+  metrics: [text.score]
+  threshold: 75
+dependencies: []
+hermes_tools: [execute_code, read_file]
+examples:
+  - "从道氏理论PDF生成18场景讲解脚本"
+  - "从'新能源行业趋势'主题生成10场景视频脚本"

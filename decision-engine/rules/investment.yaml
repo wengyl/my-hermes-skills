@@ -1,0 +1,43 @@
+# 投资域决策规则
+# Decision Engine 使用这些规则做自动化决策
+
+rules:
+  - id: INV-001
+    name: 组合回撤超限
+    domain: investment
+    condition: "portfolio.drawdown > 15"
+    action: "降低权益仓位10%，增加债券/货币基金比例"
+    priority: 9
+    enabled: true
+
+  - id: INV-002
+    name: 单基金占比过高
+    domain: investment
+    condition: "portfolio.max_single_fund_ratio > 30"
+    action: "触发再平衡提醒：单只基金占比超30%，建议分散"
+    priority: 7
+    enabled: true
+
+  - id: INV-003
+    name: 行业集中度过高
+    domain: investment
+    condition: "portfolio.industry_concentration > 60"
+    action: "标记行业集中风险：某行业占比超60%，建议跨行业分散"
+    priority: 8
+    enabled: true
+
+  - id: INV-004
+    name: 风险评分下降
+    domain: investment
+    condition: "risk.score < 50"
+    action: "风险评分低于50，建议全面风险评估并考虑减仓"
+    priority: 9
+    enabled: true
+
+  - id: INV-005
+    name: QDII汇率风险
+    domain: investment
+    condition: "portfolio.qdii_ratio > 40 and market.usd_cny_change < -2"
+    action: "QDII占比超40%且人民币贬值超2%，注意汇率风险"
+    priority: 6
+    enabled: true

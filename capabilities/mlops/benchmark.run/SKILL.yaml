@@ -1,0 +1,38 @@
+name: benchmark.run
+version: 1.0.0
+domain: mlops
+category: execution
+description: 运行lm-eval-harness标准基准测试套件，量化模型在不同任务上的表现
+input_schema:
+  type: object
+  properties:
+    model_name:
+      type: string
+    tasks:
+      type: array
+      items:
+        type: string
+      description: 基准任务列表（mmlu/gsm8k/humaneval等）
+    num_fewshot:
+      type: integer
+      description: few-shot示例数量
+  required: [model_name, tasks]
+output_schema:
+  type: object
+  properties:
+    results:
+      type: object
+      description: 任务名到得分的映射
+    accuracy:
+      type: number
+  required: [results]
+cost:
+  token_estimate: 0
+  latency_tier: high
+  price_cny: 0.0
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 75
+dependencies: [model.serve]
+hermes_tools: [terminal]

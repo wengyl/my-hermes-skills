@@ -1,0 +1,101 @@
+# Global config for my-hermes-skills — Hermes Agent Enhancement Layer
+version: "2.0.0"
+
+# 定位：Hermes Core + Enterprise Agent Layer
+# 不替代 Hermes，增强它
+
+# SQLite database path (relative to project root)
+database:
+  path: "data/agent_os.db"
+
+# Knowledge Layer 配置
+knowledge:
+  dir: "knowledge"
+  # 候选管道配置
+  candidates:
+    auto_approve_threshold: 3    # 同一缺陷出现N次自动批准
+    max_pending: 100              # 最大待审批候选数
+    auto_reject_days: 30          # 30天未审批自动拒绝
+
+# Task state machine config
+task:
+  max_retries: 3
+  repair_threshold: 0.7       # Evaluator score below this triggers repair
+  learning_threshold: 0.85   # Score above this triggers best_case storage
+  timeout_seconds: 300
+
+# Evaluator config — weight distribution
+evaluator:
+  weights:
+    text: 0.25
+    image: 0.25
+    audio: 0.20
+    video: 0.30
+  # Scoring rubrics (0-100 scale)
+  thresholds:
+    pass: 70
+    excellent: 85
+
+# Cost manager
+cost:
+  budgets:
+    default: 5.0              # CNY per task
+    video_full: 20.0
+    research: 2.0
+  model_tiers:
+    low_cost:
+      - edge-tts
+      - glm-4-flash
+    mid_cost:
+      - glm-5.2
+      - deepseek-chat
+    high_cost:
+      - claude-sonnet-4
+      - gpt-4o
+
+# Memory subsystem (增强层 Memory — 与 Hermes Memory 协同)
+memory:
+  max_failure_records: 500
+  max_best_case_records: 200
+  auto_evict_days: 90
+  # 路由规则: 经验→reflection, 事实→hermes_memory, 规则→knowledge
+  types:
+    - user          # 用户偏好
+    - failure       # 失败案例
+    - skill         # 技能运行统计
+    - best_case     # 高分成功样例
+    - reflection    # ★ 反思记录 (新增)
+
+# Capability registry
+registry:
+  scan_paths:
+    - "capabilities"
+  auto_reload: true
+
+# Planner (增强 Hermes 推理，非替代)
+planner:
+  max_plan_depth: 5
+  allow_parallel: true
+  # 工作流模板路径 (供 Planner 参考)
+  workflow_patterns_dir: "knowledge/patterns"
+
+# Reflection Engine (增强层核心)
+reflection:
+  enabled: true
+  # 反思触发条件: 每次任务完成后自动触发
+  trigger: post_task
+  # 候选自动验证: 同一缺陷出现N次自动批准合并
+  auto_validate_threshold: 3
+
+# Knowledge Curator (Memos → Knowledge 路由)
+knowledge_curator:
+  enabled: true
+  inbox_dir: "knowledge/.inbox"
+  # 分类规则: 基于关键词匹配
+  classification_keywords:
+    fact: ["是", "等于", "位于", "属于", "叫做"]
+    preference: ["偏好", "喜欢", "希望", "要求"]
+    procedure: ["步骤", "流程", "先", "然后", "最后"]
+    rule: ["必须", "不要", "应该", "禁止"]
+    experience: ["上次", "之前", "发现", "踩坑", "失败"]
+    pattern: ["模式", "规律", "通常", "一般"]

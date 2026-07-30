@@ -1,0 +1,40 @@
+name: model.serve
+version: 1.0.0
+domain: mlops
+category: execution
+description: 启动模型推理服务（vLLM/llama.cpp/Ollama），暴露OpenAI兼容API端点
+input_schema:
+  type: object
+  properties:
+    model_path:
+      type: string
+    backend:
+      type: string
+      enum: [vllm, llama_cpp, ollama, tgi]
+    port:
+      type: integer
+    quantization:
+      type: string
+      enum: [none, int4, int8, fp16]
+  required: [model_path, backend]
+output_schema:
+  type: object
+  properties:
+    endpoint:
+      type: string
+      description: API端点URL
+    model_name:
+      type: string
+    status:
+      type: string
+  required: [endpoint, status]
+cost:
+  token_estimate: 0
+  latency_tier: high
+  price_cny: 0.0
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 80
+dependencies: [model.load]
+hermes_tools: [terminal]

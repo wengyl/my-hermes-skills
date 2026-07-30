@@ -1,0 +1,40 @@
+name: model.load
+version: 1.0.0
+domain: mlops
+category: execution
+description: 从HuggingFace Hub下载模型权重到本地，支持GGUF/GPTQ/safetensors格式
+input_schema:
+  type: object
+  properties:
+    model_id:
+      type: string
+      description: HuggingFace模型ID（如meta-llama/Llama-3-8B）
+    format:
+      type: string
+      enum: [gguf, gptq, awq, safetensors, auto]
+      description: 权重格式
+    cache_dir:
+      type: string
+      description: 本地缓存目录
+  required: [model_id]
+output_schema:
+  type: object
+  properties:
+    model_path:
+      type: string
+      description: 本地模型路径
+    size_gb:
+      type: number
+    format:
+      type: string
+  required: [model_path]
+cost:
+  token_estimate: 0
+  latency_tier: high
+  price_cny: 0.0
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 80
+dependencies: [model.search]
+hermes_tools: [terminal]

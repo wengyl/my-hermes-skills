@@ -1,0 +1,47 @@
+name: model.evaluate
+version: 1.0.0
+domain: mlops
+category: evaluation
+description: 在标准基准测试集上评估模型性能（MMLU/GSM8K/HumanEval等），输出量化得分
+input_schema:
+  type: object
+  properties:
+    model_path:
+      type: string
+      description: 本地模型路径
+    benchmarks:
+      type: array
+      items:
+        type: string
+      description: 基准测试集列表
+    device:
+      type: string
+      enum: [cpu, cuda, mps, auto]
+  required: [model_path, benchmarks]
+output_schema:
+  type: object
+  properties:
+    results:
+      type: array
+      items:
+        type: object
+        properties:
+          benchmark:
+            type: string
+          score:
+            type: number
+          metric:
+            type: string
+    summary:
+      type: string
+  required: [results]
+cost:
+  token_estimate: 0
+  latency_tier: high
+  price_cny: 0.0
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 75
+dependencies: [model.load]
+hermes_tools: [terminal]

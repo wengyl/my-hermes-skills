@@ -1,0 +1,31 @@
+{
+  "skill_name": "data.fetch",
+  "test_cases": [
+    {
+      "test_id": "fetch_realtime_estimation",
+      "description": "获取基金实时估值",
+      "input": {
+        "source": "yangjibao",
+        "fund_codes": ["002112", "005165"],
+        "data_type": "realtime_estimation"
+      },
+      "expected_output_schema": {
+        "required": ["data", "timestamp"]
+      },
+      "expected_pass_score": 80
+    },
+    {
+      "test_id": "fetch_historical_nav",
+      "description": "获取历史净值",
+      "input": {
+        "source": "akshare",
+        "fund_codes": ["002112"],
+        "data_type": "historical_nav"
+      },
+      "expected_output_schema": {
+        "required": ["data"]
+      },
+      "expected_pass_score": 75
+    }
+  ]
+}

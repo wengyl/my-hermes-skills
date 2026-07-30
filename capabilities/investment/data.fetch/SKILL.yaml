@@ -1,0 +1,47 @@
+name: data.fetch
+version: 1.0.0
+domain: investment
+category: perception
+description: 从数据源获取基金/股票/市场数据（养基宝API/东方财富/akshare），支持实时估值和历史净值
+input_schema:
+  type: object
+  properties:
+    source:
+      type: string
+      enum: [yangjibao, eastmoney, akshare, sina]
+      description: 数据源
+    fund_codes:
+      type: array
+      items:
+        type: string
+      description: 基金代码列表
+    data_type:
+      type: string
+      enum: [realtime_estimation, historical_nav, holdings, market_index]
+      description: 数据类型
+    token:
+      type: string
+      description: 数据源认证token（如养基宝）
+  required: [source, data_type]
+output_schema:
+  type: object
+  properties:
+    data:
+      type: array
+      items:
+        type: object
+    timestamp:
+      type: string
+    source:
+      type: string
+  required: [data, timestamp]
+cost:
+  token_estimate: 200
+  latency_tier: low
+  price_cny: 0.0
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 80
+dependencies: []
+hermes_tools: [terminal, execute_code]

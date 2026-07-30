@@ -1,0 +1,50 @@
+# 标准工作流模式：投资分析任务
+# 增强 Hermes 推理的规划模板（非替代，而是提供结构化参考）
+
+domain: investment
+pattern_name: fund_diagnosis_workflow
+version: "1.0"
+description: 基金组合诊断标准流程，供Planner参考
+
+phases:
+  - phase: 1_macro_context
+    name: 宏观环境扫描
+    steps:
+      - 获取当日A股/港股/美股主要指数涨跌
+      - 获取当日行业板块涨跌排行
+      - 识别重大政策/事件影响
+    best_practice_ref: fund_diagnosis_methodology#real_time_data_required
+
+  - phase: 2_portfolio_snapshot
+    name: 组合全景快照
+    steps:
+      - 获取用户全部持仓基金净值+估值
+      - 计算组合总市值+日收益
+      - 计算每只基金占比
+    best_practice_ref: fund_diagnosis_methodology#full_portfolio_view
+
+  - phase: 3_individual_diagnosis
+    name: 逐只诊断
+    steps:
+      - 每只基金：行业暴露分析(top3行业)
+      - 每只基金：近1月/3月/6月收益率+最大回撤
+      - 每只基金：与基准指数相关性
+      - 每只基金：评分(0-100)
+    best_practice_ref: fund_diagnosis_methodology#explicit_action
+
+  - phase: 4_risk_analysis
+    name: 风险诊断
+    steps:
+      - 组合层面：行业集中度
+      - 组合层面：风格偏移（价值/成长/均衡）
+      - 组合层面：回撤压力测试
+    best_practice_ref: fund_diagnosis_methodology#five_section_format
+
+  - phase: 5_action_plan
+    name: 操作建议
+    steps:
+      - P0紧急：需立即操作的问题基金
+      - P1重要：未来一周内关注
+      - P2可选：优化空间
+      - 调仓前后对比（风险敞口变化）
+    best_practice_ref: fund_diagnosis_methodology#explicit_action

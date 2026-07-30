@@ -1,0 +1,51 @@
+name: voice.generate
+version: 1.0.0
+domain: video
+category: generation
+description: 为每个scene独立生成TTS音频MP3 + SentenceBoundary时间戳JSON（支持edge-tts/SiliconFlow/火山TTS）
+input_schema:
+  type: object
+  properties:
+    scenes:
+      type: array
+      description: script.create输出的scenes列表
+    voice_config:
+      type: object
+      properties:
+        engine:
+          type: string
+          enum: [edge-tts, siliconflow, volcano]
+        voice:
+          type: string
+        rate:
+          type: string
+    output_dir:
+      type: string
+  required: [scenes, voice_config, output_dir]
+output_schema:
+  type: object
+  properties:
+    audio_files:
+      type: array
+      items:
+        type: string
+      description: MP3文件路径列表
+    srt_files:
+      type: array
+      items:
+        type: string
+      description: 时间戳JSON文件路径列表
+    total_duration:
+      type: number
+      description: 总时长（秒）
+  required: [audio_files, srt_files, total_duration]
+cost:
+  token_estimate: 500
+  latency_tier: medium
+  price_cny: 0.05
+evaluation:
+  type: audio
+  metrics: [audio.score]
+  threshold: 75
+dependencies: [script.create]
+hermes_tools: [terminal, execute_code]

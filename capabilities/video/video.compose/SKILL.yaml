@@ -1,0 +1,44 @@
+name: video.compose
+version: 1.0.0
+domain: video
+category: execution
+description: FFmpeg两阶段合成最终视频（concat字幕帧→base video→fade转场→合并音频，输出1920x1080 30fps MP4）
+input_schema:
+  type: object
+  properties:
+    subtitle_frames:
+      type: array
+      description: subtitle.generate输出
+    audio_files:
+      type: array
+      items:
+        type: string
+      description: voice.generate输出的音频文件列表
+    fade_config:
+      type: object
+      description: 转场配置
+    output_path:
+      type: string
+  required: [subtitle_frames, audio_files, output_path]
+output_schema:
+  type: object
+  properties:
+    video_path:
+      type: string
+    duration:
+      type: number
+    file_size_mb:
+      type: number
+    resolution:
+      type: string
+  required: [video_path, duration]
+cost:
+  token_estimate: 0
+  latency_tier: high
+  price_cny: 0.0
+evaluation:
+  type: video
+  metrics: [video.score]
+  threshold: 75
+dependencies: [subtitle.generate, voice.generate]
+hermes_tools: [terminal]

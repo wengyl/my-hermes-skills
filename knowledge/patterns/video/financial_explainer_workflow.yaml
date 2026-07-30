@@ -1,0 +1,50 @@
+domain: video
+pattern_name: financial_explainer_workflow
+version: "1.0"
+description: AI财经讲解视频标准流程
+
+phases:
+  - phase: 1_content_positioning
+    name: 内容定位
+    steps:
+      - 确定目标受众（小白/进阶/专业）
+      - 确定核心知识点（1个主论点+3-5个支撑论据）
+      - 确定情绪基调（理性/激动/客观）
+    best_practice_ref: financial_video_style#info_peak_30s
+
+  - phase: 2_script_creation
+    name: 脚本创作
+    steps:
+      - 逐场景脚本（每个scene 20-40秒）
+      - 每场景一个核心信息点
+      - 标注数据引用点
+    best_practice_ref: financial_video_style#data_as_chart
+
+  - phase: 3_visual_planning
+    name: 视觉规划
+    steps:
+      - 确定全局视觉风格（统一prompt模板）
+      - 逐场景分镜（scene plan）
+      - 标注需要数据图表的位置
+    best_practice_ref: financial_video_style#consistent_style
+
+  - phase: 4_asset_generation
+    name: 素材生成（可并行）
+    parallel:
+      - branch: voice
+        steps:
+          - TTS逐场景配音
+          - SentenceBoundary时间戳捕获
+      - branch: visual
+        steps:
+          - AI配图（统一风格模板）
+          - PIL中文标注
+    best_practice_ref: financial_video_style#no_text_in_image
+
+  - phase: 5_compose_qa
+    name: 合成+质检
+    steps:
+      - 音画合成（精确时间戳对齐）
+      - 字幕生成（CJK标点保护）
+      - 质量评估（分辨率/音画同步/字幕）
+    best_practice_ref: financial_video_style#cjk_subtitle_alignment

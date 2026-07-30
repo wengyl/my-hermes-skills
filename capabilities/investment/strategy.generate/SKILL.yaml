@@ -1,0 +1,53 @@
+name: strategy.generate
+version: 1.0.0
+domain: investment
+category: reasoning
+description: 基于组合分析和市场数据生成投资策略建议（调仓优先级P0/P1/P2+前后对比）
+input_schema:
+  type: object
+  properties:
+    portfolio_analysis:
+      type: object
+      description: portfolio.analyze输出
+    fund_diagnoses:
+      type: array
+      items:
+        type: object
+      description: 各基金诊断结果
+    market_outlook:
+      type: string
+      description: 市场展望
+  required: [portfolio_analysis, fund_diagnoses]
+output_schema:
+  type: object
+  properties:
+    priorities:
+      type: array
+      items:
+        type: object
+        properties:
+          level:
+            type: string
+            enum: [P0, P1, P2]
+          action:
+            type: string
+          fund_code:
+            type: string
+          shares:
+            type: integer
+    before_after:
+      type: object
+      description: 调仓前后对比
+    summary:
+      type: string
+  required: [priorities, summary]
+cost:
+  token_estimate: 2000
+  latency_tier: medium
+  price_cny: 0.05
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 75
+dependencies: [portfolio.analyze, fund.diagnose]
+hermes_tools: [execute_code]

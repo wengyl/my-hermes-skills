@@ -1,0 +1,51 @@
+name: fund.diagnose
+version: 1.0.0
+domain: investment
+category: evaluation
+description: 单只基金深度诊断（评分0-100+问题诊断+操作建议+具体调仓份额），含五段式输出
+input_schema:
+  type: object
+  properties:
+    fund_code:
+      type: string
+    fund_name:
+      type: string
+    holdings_data:
+      type: object
+      description: 持仓数据
+    market_data:
+      type: object
+      description: 今日市场数据
+    portfolio_context:
+      type: object
+      description: 组合上下文（不孤立分析）
+  required: [fund_code]
+output_schema:
+  type: object
+  properties:
+    score:
+      type: number
+      description: 0-100
+    problems:
+      type: array
+      items:
+        type: string
+    action:
+      type: string
+      enum: [持有, 减仓, 清仓, 加仓]
+    action_shares:
+      type: integer
+      description: 建议操作的具体份额数
+    reasoning:
+      type: string
+  required: [score, action, reasoning]
+cost:
+  token_estimate: 3000
+  latency_tier: medium
+  price_cny: 0.08
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 75
+dependencies: [data.fetch, portfolio.analyze]
+hermes_tools: [execute_code]

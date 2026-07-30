@@ -1,0 +1,49 @@
+name: subtitle.generate
+version: 1.0.0
+domain: video
+category: generation
+description: 从全局字幕数据生成PIL逐帧字幕帧（打字机效果+关键词金色高亮+淡出淡入+进度条+进度环）
+input_schema:
+  type: object
+  properties:
+    global_srt:
+      type: array
+      description: voice.align输出的全局字幕
+    scene_images:
+      type: array
+      items:
+        type: string
+      description: 每scene底图路径
+    output_dir:
+      type: string
+    config:
+      type: object
+      description: 字幕样式配置（字号/颜色/关键词列表）
+  required: [global_srt, scene_images, output_dir]
+output_schema:
+  type: object
+  properties:
+    subtitle_frames:
+      type: array
+      items:
+        type: object
+        properties:
+          scene_id:
+            type: integer
+          frame_index:
+            type: integer
+          image_path:
+            type: string
+    total_frames:
+      type: integer
+  required: [subtitle_frames, total_frames]
+cost:
+  token_estimate: 300
+  latency_tier: high
+  price_cny: 0.02
+evaluation:
+  type: image
+  metrics: [image.score]
+  threshold: 70
+dependencies: [voice.align, image.generate]
+hermes_tools: [execute_code, terminal]

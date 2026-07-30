@@ -1,0 +1,48 @@
+name: voice.align
+version: 1.0.0
+domain: video
+category: execution
+description: 对齐TTS音频时间戳与脚本文本，生成全局时间轴字幕数据（场景偏移+句内时间）
+input_schema:
+  type: object
+  properties:
+    srt_files:
+      type: array
+      items:
+        type: string
+      description: voice.generate输出的时间戳JSON列表
+    scene_offsets:
+      type: array
+      items:
+        type: number
+      description: 每个scene的全局起始偏移（秒）
+  required: [srt_files, scene_offsets]
+output_schema:
+  type: object
+  properties:
+    global_srt:
+      type: array
+      items:
+        type: object
+        properties:
+          scene_id:
+            type: integer
+          start:
+            type: number
+          end:
+            type: number
+          text:
+            type: string
+    total_duration:
+      type: number
+  required: [global_srt, total_duration]
+cost:
+  token_estimate: 200
+  latency_tier: low
+  price_cny: 0.01
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 80
+dependencies: [voice.generate]
+hermes_tools: [execute_code]

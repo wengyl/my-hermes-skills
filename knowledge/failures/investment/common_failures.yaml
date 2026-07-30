@@ -1,0 +1,19 @@
+domain: investment
+last_updated: "2026-07-30"
+
+failures:
+  - id: FAIL-101
+    skill: data.fetch
+    pattern: "基金估值数据源API不可用（养基宝token过期）"
+    root_cause: "token有效期约2小时，微信扫码获取后未自动刷新"
+    solution: "检测到401时提示用户重新扫码，不静默用旧数据"
+    occurrence_count: 5
+    status: resolved
+
+  - id: FAIL-102
+    skill: portfolio.analyze
+    pattern: "组合分析遗漏单只基金的行业暴露"
+    root_cause: "仅看基金名称未深入持仓行业分布"
+    solution: "强制要求portfolio.analyze输出每只基金的top3行业占比"
+    occurrence_count: 2
+    status: resolved

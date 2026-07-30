@@ -1,0 +1,41 @@
+# 最佳实践：财经视频制作风格规范
+# 由 Reflection Engine 从成功案例中提炼，或由用户手动创建
+# confidence: 经验置信度（0-1），>0.8 为高置信度规则
+
+id: financial_video_style
+domain: video
+when: 制作财经/投资类AI讲解视频
+confidence: 0.92
+source: accumulated_experience
+last_updated: "2026-07-30"
+
+rules:
+  - id: no_text_in_image
+    rule: "AI配图不要生成文字，文字用PIL单独标注"
+    reason: "AI生成的文字通常模糊、变形、不准确，中文字尤甚"
+    enforcement: hard
+
+  - id: data_as_chart
+    rule: "数据用图表表达，不要用纯文字罗列"
+    reason: "视觉化数据比文字堆砌更易理解"
+    enforcement: soft
+
+  - id: info_peak_30s
+    rule: "每30秒安排一次信息高潮（关键洞察/数据对比/结论）"
+    reason: "维持观众注意力，避免平铺直叙"
+    enforcement: soft
+
+  - id: consistent_style
+    rule: "整个视频的配图风格必须统一（同一prompt模板+固定style tokens）"
+    reason: "风格跳跃破坏沉浸感"
+    enforcement: hard
+
+  - id: cjk_subtitle_alignment
+    rule: "中文字幕必须用SentenceBoundary精确时间戳对齐，不能靠时长均分"
+    reason: "中文TTS语速不均匀，均分会导致字幕与语音不同步"
+    enforcement: hard
+
+  - id: dark_theme_high_contrast
+    rule: "视频背景用纯黑或深色，文字用高对比度配色"
+    reason: "用户在手机端观看，暗色背景减少反光疲劳"
+    enforcement: soft

@@ -1,0 +1,51 @@
+name: portfolio.analyze
+version: 1.0.0
+domain: investment
+category: comprehension
+description: 分析基金组合整体表现（收益率/回撤/相关性/行业暴露/风格漂移），输出组合透视
+input_schema:
+  type: object
+  properties:
+    holdings:
+      type: array
+      items:
+        type: object
+        properties:
+          fund_code:
+            type: string
+          fund_name:
+            type: string
+          shares:
+            type: number
+          cost:
+            type: number
+    market_data:
+      type: object
+      description: data.fetch获取的市场数据
+  required: [holdings]
+output_schema:
+  type: object
+  properties:
+    total_value:
+      type: number
+    total_return:
+      type: number
+    positions:
+      type: array
+      items:
+        type: object
+    correlations:
+      type: object
+    sector_exposure:
+      type: object
+  required: [total_value, positions]
+cost:
+  token_estimate: 1000
+  latency_tier: medium
+  price_cny: 0.03
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 75
+dependencies: [data.fetch]
+hermes_tools: [execute_code]

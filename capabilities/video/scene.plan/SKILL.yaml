@@ -1,0 +1,45 @@
+name: scene.plan
+version: 1.0.0
+domain: video
+category: reasoning
+description: 规划每个scene的画面生成策略（HTML截图/AI配图/素材库匹配），输出scene级别的画面生成方案
+input_schema:
+  type: object
+  properties:
+    script_json:
+      type: object
+    strategy:
+      type: string
+      enum: [html_screenshot, ai_image, stock_footage, mixed]
+      description: 画面生成策略
+  required: [script_json, strategy]
+output_schema:
+  type: object
+  properties:
+    scene_plans:
+      type: array
+      items:
+        type: object
+        properties:
+          scene_id:
+            type: integer
+          method:
+            type: string
+            enum: [html_screenshot, ai_image, stock_footage]
+          prompt:
+            type: string
+          labels:
+            type: array
+            items:
+              type: object
+  required: [scene_plans]
+cost:
+  token_estimate: 2000
+  latency_tier: low
+  price_cny: 0.05
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 70
+dependencies: [script.create]
+hermes_tools: [execute_code]

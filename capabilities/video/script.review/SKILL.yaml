@@ -1,0 +1,44 @@
+name: script.review
+version: 1.0.0
+domain: video
+category: evaluation
+description: 审查视频脚本JSON的结构完整性、文案质量、分镜合理性，输出评分和修改建议
+input_schema:
+  type: object
+  properties:
+    script_json:
+      type: object
+      description: script.create的输出JSON
+    criteria:
+      type: array
+      items:
+        type: string
+      description: 审查标准列表
+  required: [script_json]
+output_schema:
+  type: object
+  properties:
+    score:
+      type: number
+      description: 0-100
+    defects:
+      type: array
+      items:
+        type: string
+    suggestions:
+      type: array
+      items:
+        type: string
+    passed:
+      type: boolean
+  required: [score, defects, suggestions, passed]
+cost:
+  token_estimate: 2000
+  latency_tier: low
+  price_cny: 0.05
+evaluation:
+  type: json
+  metrics: [text.score]
+  threshold: 75
+dependencies: [script.create]
+hermes_tools: [execute_code]

@@ -1,0 +1,586 @@
+[
+  {
+    "name": "alert.monitor",
+    "version": "1.0.0",
+    "domain": "investment",
+    "category": "verification",
+    "description": "监控基金/市场指标，触发阈值条件时生成告警消息（空stdout=静默）",
+    "cost": {
+      "token_estimate": 500,
+      "latency_tier": "low",
+      "price_cny": 0.01
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 70
+    },
+    "dependencies": [
+      "data.fetch"
+    ],
+    "hermes_tools": [
+      "terminal",
+      "execute_code"
+    ]
+  },
+  {
+    "name": "data.fetch",
+    "version": "1.0.0",
+    "domain": "investment",
+    "category": "perception",
+    "description": "从数据源获取基金/股票/市场数据（养基宝API/东方财富/akshare），支持实时估值和历史净值",
+    "cost": {
+      "token_estimate": 200,
+      "latency_tier": "low",
+      "price_cny": 0.0
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 80
+    },
+    "dependencies": [],
+    "hermes_tools": [
+      "terminal",
+      "execute_code"
+    ]
+  },
+  {
+    "name": "fund.diagnose",
+    "version": "1.0.0",
+    "domain": "investment",
+    "category": "evaluation",
+    "description": "单只基金深度诊断（评分0-100+问题诊断+操作建议+具体调仓份额），含五段式输出",
+    "cost": {
+      "token_estimate": 3000,
+      "latency_tier": "medium",
+      "price_cny": 0.08
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [
+      "data.fetch",
+      "portfolio.analyze"
+    ],
+    "hermes_tools": [
+      "execute_code"
+    ]
+  },
+  {
+    "name": "portfolio.analyze",
+    "version": "1.0.0",
+    "domain": "investment",
+    "category": "comprehension",
+    "description": "分析基金组合整体表现（收益率/回撤/相关性/行业暴露/风格漂移），输出组合透视",
+    "cost": {
+      "token_estimate": 1000,
+      "latency_tier": "medium",
+      "price_cny": 0.03
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [
+      "data.fetch"
+    ],
+    "hermes_tools": [
+      "execute_code"
+    ]
+  },
+  {
+    "name": "report.generate",
+    "version": "1.0.0",
+    "domain": "investment",
+    "category": "generation",
+    "description": "生成投资分析报告（五段式：数据表格+评分系统+问题诊断+操作优先级+调仓前后对比）",
+    "cost": {
+      "token_estimate": 2000,
+      "latency_tier": "medium",
+      "price_cny": 0.05
+    },
+    "evaluation": {
+      "type": "text",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [
+      "strategy.generate",
+      "fund.diagnose",
+      "portfolio.analyze"
+    ],
+    "hermes_tools": [
+      "execute_code"
+    ]
+  },
+  {
+    "name": "strategy.generate",
+    "version": "1.0.0",
+    "domain": "investment",
+    "category": "reasoning",
+    "description": "基于组合分析和市场数据生成投资策略建议（调仓优先级P0/P1/P2+前后对比）",
+    "cost": {
+      "token_estimate": 2000,
+      "latency_tier": "medium",
+      "price_cny": 0.05
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [
+      "portfolio.analyze",
+      "fund.diagnose"
+    ],
+    "hermes_tools": [
+      "execute_code"
+    ]
+  },
+  {
+    "name": "benchmark.run",
+    "version": "1.0.0",
+    "domain": "mlops",
+    "category": "execution",
+    "description": "运行lm-eval-harness标准基准测试套件，量化模型在不同任务上的表现",
+    "cost": {
+      "token_estimate": 0,
+      "latency_tier": "high",
+      "price_cny": 0.0
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [
+      "model.serve"
+    ],
+    "hermes_tools": [
+      "terminal"
+    ]
+  },
+  {
+    "name": "dataset.prepare",
+    "version": "1.0.0",
+    "domain": "mlops",
+    "category": "execution",
+    "description": "数据集预处理（清洗/分词/格式转换/分割），输出训练就绪的数据",
+    "cost": {
+      "token_estimate": 100,
+      "latency_tier": "medium",
+      "price_cny": 0.0
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 80
+    },
+    "dependencies": [],
+    "hermes_tools": [
+      "terminal",
+      "execute_code"
+    ]
+  },
+  {
+    "name": "model.evaluate",
+    "version": "1.0.0",
+    "domain": "mlops",
+    "category": "evaluation",
+    "description": "在标准基准测试集上评估模型性能（MMLU/GSM8K/HumanEval等），输出量化得分",
+    "cost": {
+      "token_estimate": 0,
+      "latency_tier": "high",
+      "price_cny": 0.0
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [
+      "model.load"
+    ],
+    "hermes_tools": [
+      "terminal"
+    ]
+  },
+  {
+    "name": "model.load",
+    "version": "1.0.0",
+    "domain": "mlops",
+    "category": "execution",
+    "description": "从HuggingFace Hub下载模型权重到本地，支持GGUF/GPTQ/safetensors格式",
+    "cost": {
+      "token_estimate": 0,
+      "latency_tier": "high",
+      "price_cny": 0.0
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 80
+    },
+    "dependencies": [
+      "model.search"
+    ],
+    "hermes_tools": [
+      "terminal"
+    ]
+  },
+  {
+    "name": "model.search",
+    "version": "1.0.0",
+    "domain": "mlops",
+    "category": "perception",
+    "description": "搜索HuggingFace Hub获取可用模型列表，按任务类型/语言/下载量过滤",
+    "cost": {
+      "token_estimate": 200,
+      "latency_tier": "low",
+      "price_cny": 0.0
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 70
+    },
+    "dependencies": [],
+    "hermes_tools": [
+      "terminal"
+    ]
+  },
+  {
+    "name": "model.serve",
+    "version": "1.0.0",
+    "domain": "mlops",
+    "category": "execution",
+    "description": "启动模型推理服务（vLLM/llama.cpp/Ollama），暴露OpenAI兼容API端点",
+    "cost": {
+      "token_estimate": 0,
+      "latency_tier": "high",
+      "price_cny": 0.0
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 80
+    },
+    "dependencies": [
+      "model.load"
+    ],
+    "hermes_tools": [
+      "terminal"
+    ]
+  },
+  {
+    "name": "image.evaluate",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "evaluation",
+    "description": "评估生成的图片质量（分辨率达标/中文标注正确/内容与脚本匹配度），输出评分和缺陷清单",
+    "cost": {
+      "token_estimate": 1000,
+      "latency_tier": "low",
+      "price_cny": 0.03
+    },
+    "evaluation": {
+      "type": "image",
+      "metrics": [
+        "image.score"
+      ],
+      "threshold": 70
+    },
+    "dependencies": [
+      "image.generate"
+    ],
+    "hermes_tools": [
+      "vision_analyze",
+      "execute_code"
+    ]
+  },
+  {
+    "name": "image.generate",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "generation",
+    "description": "按scene画面方案生成1920x1080图片（Chrome headless截图HTML / Agnes AI配图+PIL中文标注 / 素材库匹配）",
+    "cost": {
+      "token_estimate": 1500,
+      "latency_tier": "high",
+      "price_cny": 0.3
+    },
+    "evaluation": {
+      "type": "image",
+      "metrics": [
+        "image.score"
+      ],
+      "threshold": 70
+    },
+    "dependencies": [
+      "scene.plan",
+      "storyboard.create"
+    ],
+    "hermes_tools": [
+      "terminal",
+      "execute_code"
+    ]
+  },
+  {
+    "name": "scene.plan",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "reasoning",
+    "description": "规划每个scene的画面生成策略（HTML截图/AI配图/素材库匹配），输出scene级别的画面生成方案",
+    "cost": {
+      "token_estimate": 2000,
+      "latency_tier": "low",
+      "price_cny": 0.05
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 70
+    },
+    "dependencies": [
+      "script.create"
+    ],
+    "hermes_tools": [
+      "execute_code"
+    ]
+  },
+  {
+    "name": "script.create",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "generation",
+    "description": "从用户输入的文档/PDF/文章/主题，生成结构化视频脚本JSON（含scenes列表，每scene含voice_text/visual/chapter_title）",
+    "cost": {
+      "token_estimate": 5000,
+      "latency_tier": "medium",
+      "price_cny": 0.15
+    },
+    "evaluation": {
+      "type": "text",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [],
+    "hermes_tools": [
+      "execute_code",
+      "read_file"
+    ]
+  },
+  {
+    "name": "script.review",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "evaluation",
+    "description": "审查视频脚本JSON的结构完整性、文案质量、分镜合理性，输出评分和修改建议",
+    "cost": {
+      "token_estimate": 2000,
+      "latency_tier": "low",
+      "price_cny": 0.05
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [
+      "script.create"
+    ],
+    "hermes_tools": [
+      "execute_code"
+    ]
+  },
+  {
+    "name": "storyboard.create",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "generation",
+    "description": "从视频脚本JSON生成HTML分镜模板，每scene对应一个HTML文件，含CSS入场动效和内容布局",
+    "cost": {
+      "token_estimate": 3000,
+      "latency_tier": "medium",
+      "price_cny": 0.1
+    },
+    "evaluation": {
+      "type": "image",
+      "metrics": [
+        "image.score"
+      ],
+      "threshold": 70
+    },
+    "dependencies": [
+      "script.create"
+    ],
+    "hermes_tools": [
+      "write_file",
+      "execute_code"
+    ]
+  },
+  {
+    "name": "subtitle.generate",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "generation",
+    "description": "从全局字幕数据生成PIL逐帧字幕帧（打字机效果+关键词金色高亮+淡出淡入+进度条+进度环）",
+    "cost": {
+      "token_estimate": 300,
+      "latency_tier": "high",
+      "price_cny": 0.02
+    },
+    "evaluation": {
+      "type": "image",
+      "metrics": [
+        "image.score"
+      ],
+      "threshold": 70
+    },
+    "dependencies": [
+      "voice.align",
+      "image.generate"
+    ],
+    "hermes_tools": [
+      "execute_code",
+      "terminal"
+    ]
+  },
+  {
+    "name": "video.compose",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "execution",
+    "description": "FFmpeg两阶段合成最终视频（concat字幕帧→base video→fade转场→合并音频，输出1920x1080 30fps MP4）",
+    "cost": {
+      "token_estimate": 0,
+      "latency_tier": "high",
+      "price_cny": 0.0
+    },
+    "evaluation": {
+      "type": "video",
+      "metrics": [
+        "video.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [
+      "subtitle.generate",
+      "voice.generate"
+    ],
+    "hermes_tools": [
+      "terminal"
+    ]
+  },
+  {
+    "name": "video.evaluate",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "evaluation",
+    "description": "评估最终视频质量（分辨率/帧率/音频同步/字幕可读性/画面流畅度/转场自然度）",
+    "cost": {
+      "token_estimate": 2000,
+      "latency_tier": "medium",
+      "price_cny": 0.05
+    },
+    "evaluation": {
+      "type": "video",
+      "metrics": [
+        "video.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [
+      "video.compose"
+    ],
+    "hermes_tools": [
+      "terminal",
+      "execute_code"
+    ]
+  },
+  {
+    "name": "voice.align",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "execution",
+    "description": "对齐TTS音频时间戳与脚本文本，生成全局时间轴字幕数据（场景偏移+句内时间）",
+    "cost": {
+      "token_estimate": 200,
+      "latency_tier": "low",
+      "price_cny": 0.01
+    },
+    "evaluation": {
+      "type": "json",
+      "metrics": [
+        "text.score"
+      ],
+      "threshold": 80
+    },
+    "dependencies": [
+      "voice.generate"
+    ],
+    "hermes_tools": [
+      "execute_code"
+    ]
+  },
+  {
+    "name": "voice.generate",
+    "version": "1.0.0",
+    "domain": "video",
+    "category": "generation",
+    "description": "为每个scene独立生成TTS音频MP3 + SentenceBoundary时间戳JSON（支持edge-tts/SiliconFlow/火山TTS）",
+    "cost": {
+      "token_estimate": 500,
+      "latency_tier": "medium",
+      "price_cny": 0.05
+    },
+    "evaluation": {
+      "type": "audio",
+      "metrics": [
+        "audio.score"
+      ],
+      "threshold": 75
+    },
+    "dependencies": [
+      "script.create"
+    ],
+    "hermes_tools": [
+      "terminal",
+      "execute_code"
+    ]
+  }
+]

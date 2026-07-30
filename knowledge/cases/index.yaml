@@ -1,0 +1,31 @@
+# 经验案例库索引
+# 成功案例索引（由 Reflection Engine 自动维护）
+# 每条案例引用 Memory 中的 best_case 记录
+
+domain: investment
+case_id: CASE-001
+goal: "诊断基金组合（11只）并给出调仓建议"
+score: 92
+key_factors:
+  - 全组合透视正确执行
+  - 实时净值+行业涨跌数据获取成功
+  - 每只基金给出明确操作建议+份额
+  - 五段式输出结构完整
+timestamp: "2026-07-09"
+memory_ref: "best_case:task_334e31014aa1"
+
+---
+
+domain: video
+case_id: CASE-002
+goal: "道氏理论PDF转AI讲解视频"
+score: 88
+key_factors:
+  - 脚本分段合理（12个scene）
+  - TTS时间戳精确对齐
+  - 配图风格统一
+  - 字幕CJK标点处理正确
+improvements_needed:
+  - 部分scene信息密度可提升
+timestamp: "2026-07-15"
+memory_ref: "best_case:task_0d2e1597464d"

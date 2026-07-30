@@ -1,0 +1,34 @@
+{
+  "skill_name": "voice.generate",
+  "test_cases": [
+    {
+      "test_id": "single_scene_tts",
+      "description": "单场景TTS生成",
+      "input": {
+        "scenes": [{"voice_text": "道氏理论是技术分析的基础", "duration": 10}],
+        "voice_config": {"engine": "edge-tts", "voice": "zh-CN-YunxiNeural", "rate": "+0%"},
+        "output_dir": "/tmp/bench_voice"
+      },
+      "expected_output_schema": {
+        "required": ["audio_files", "srt_files", "total_duration"]
+      },
+      "expected_pass_score": 75
+    },
+    {
+      "test_id": "multi_scene_tts",
+      "description": "多场景批量TTS",
+      "input": {
+        "scenes": [
+          {"voice_text": "第一段", "duration": 5},
+          {"voice_text": "第二段", "duration": 5}
+        ],
+        "voice_config": {"engine": "edge-tts"},
+        "output_dir": "/tmp/bench_voice2"
+      },
+      "expected_output_schema": {
+        "required": ["audio_files", "srt_files"]
+      },
+      "expected_pass_score": 80
+    }
+  ]
+}

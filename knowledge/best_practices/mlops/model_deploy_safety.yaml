@@ -1,0 +1,24 @@
+# 最佳实践：MLOps模型部署规范
+
+id: model_deploy_safety
+domain: mlops
+when: 搜索/部署/服务化ML模型
+confidence: 0.85
+source: accumulated_experience
+last_updated: "2026-07-30"
+
+rules:
+  - id: quantize_first
+    rule: "本地推理优先使用量化模型（GGUF/GPTQ），非量化模型仅用于评估"
+    reason: "量化模型内存占用减少60-80%，速度提升3-5x"
+    enforcement: soft
+
+  - id: benchmark_before_serve
+    rule: "模型服务化前必须跑基准测试（tokens/s, 延迟, 内存峰值）"
+    reason: "不跑benchmark直接serve可能遇到OOM或超低吞吐"
+    enforcement: hard
+
+  - id: vllm_for_throughput
+    rule: "高并发场景用vLLM，低延迟单请求用llama.cpp"
+    reason: "vLLM的PagedAttention优化高并发，llama.cpp启动快内存小"
+    enforcement: soft

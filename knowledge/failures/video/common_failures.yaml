@@ -1,0 +1,38 @@
+# 常见失败案例：视频制作域
+# 由 Reflection Engine 自动收集，经验证后合并到此文件
+
+domain: video
+last_updated: "2026-07-30"
+
+failures:
+  - id: FAIL-001
+    skill: image.generate
+    pattern: "图片分辨率不达标（<1920x1080）"
+    root_cause: "TTS模型默认输出512x512，未指定resolution参数"
+    solution: "在runner.py中硬编码resolution=1920x1080，或通过input_schema约束"
+    occurrence_count: 3
+    status: resolved
+
+  - id: FAIL-002
+    skill: voice.generate
+    pattern: "音频文件数与时间戳文件数不匹配"
+    root_cause: "TTS生成中途中断但未抛异常，导致部分scene缺音频"
+    solution: "执行后校验文件数==scene数，不匹配则重试缺失的scene"
+    occurrence_count: 2
+    status: resolved
+
+  - id: FAIL-003
+    skill: video.compose
+    pattern: "音画不同步（字幕提前/滞后）"
+    root_cause: "使用时长均分而非SentenceBoundary精确时间戳"
+    solution: "强制使用voice.align输出的精确时间戳，禁止时长均分fallback"
+    occurrence_count: 4
+    status: resolved
+
+  - id: FAIL-004
+    skill: subtitle.generate
+    pattern: "中文字幕换行位置错误（标点前断行）"
+    root_cause: "字幕断句逻辑未处理CJK标点规则"
+    solution: "在断句逻辑中加入CJK标点保护规则（。，！？不在行首）"
+    occurrence_count: 1
+    status: candidate

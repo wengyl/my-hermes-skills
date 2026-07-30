@@ -1,0 +1,40 @@
+name: image.generate
+version: 1.0.0
+domain: video
+category: generation
+description: 按scene画面方案生成1920x1080图片（Chrome headless截图HTML / Agnes AI配图+PIL中文标注 / 素材库匹配）
+input_schema:
+  type: object
+  properties:
+    scene_plan:
+      type: object
+      description: scene.plan输出的单个scene方案
+    output_dir:
+      type: string
+      description: 图片输出目录
+    scene_index:
+      type: integer
+  required: [scene_plan, output_dir, scene_index]
+output_schema:
+  type: object
+  properties:
+    image_path:
+      type: string
+      description: 生成的PNG路径
+    method_used:
+      type: string
+    width:
+      type: integer
+    height:
+      type: integer
+  required: [image_path, method_used]
+cost:
+  token_estimate: 1500
+  latency_tier: high
+  price_cny: 0.30
+evaluation:
+  type: image
+  metrics: [image.score]
+  threshold: 70
+dependencies: [scene.plan, storyboard.create]
+hermes_tools: [terminal, execute_code]
