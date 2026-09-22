@@ -70,3 +70,13 @@ python -m tests.test_phase4   # Evolution+Benchmark
 python -m tests.test_phase5   # Enhancement Layer (Knowledge+Reflection+Curator+Bridge)
 python -m tests.test_phase6   # Agent Engineering (Context+Graph+Decision+Router+Feedback+Journal+Goal+MultiAgent)
 ```
+
+## 关于作者 / 支持
+
+由 [wengyl](https://github.com/wengyl) 创作与维护。这里存放的是我日常在真实 Agent 工程实践中沉淀的技能与架构方案。
+
+如果你觉得这些内容有帮助，欢迎在我的 [爱发电主页](https://afdian.com/a/devtoolbox2026) 发电支持——那是我持续整理、发布跨境合规速报、数字工具模板与自动化方案的地方。
+
+```
+爱发电 · 开发者工具箱 → https://afdian.com/a/devtoolbox2026
+```
